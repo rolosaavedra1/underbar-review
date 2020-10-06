@@ -43,7 +43,7 @@
       it('should return empty array if zero is passed in as the index', function() {
         // There is a very important difference between `equal` and `eql`
         // Can you discover what it is?
-        expect(_.first([1, 2, 3], 0)).to.eql(FILL_ME_IN);
+        expect(_.first([1, 2, 3], 0)).to.eql([]);
       });
 
       it('should return all the array\'s elements if the index argument is larger than the length of the array', function() {
