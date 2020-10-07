@@ -189,12 +189,13 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    var noAccumulator = arguments.length === 2;
+    var noAccumulator = arguments.length === 2; //check if initial accumulator argument is present
     _.each(collection, function(element) {
       if (noAccumulator) {
         accumulator = element;
         noAccumulator = false;
       } else {
+        //iterator function takes (memo, element) as arguments. memo is the name for the accumulator variable.
         accumulator = iterator(accumulator, element);
       }
     });
@@ -216,13 +217,30 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    //if iterator is undefined, let it be _.identity
+    iterator = (iterator === undefined) ? (_.identity) : (iterator);
+    //so our accumulator is a boolean equal to true
+    return _.reduce(collection, function(allTrue, item) {
+      // our iterator evaluates all items for a certain condition. AllTrue is the memo.
+      if (!iterator(item)) {
+        // if a single item doesn't satisfy the condition, return false
+        return false;
+      }
+      //evaluate accumulator variable allTrue
+      return (allTrue) ? (true) : (false);
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    //if iterator is undefined, let it be _.identity
+    iterator = (iterator === undefined) ? (_.identity) : (iterator);
+    // every() checks that all elements are true. As soon as it finds one false intance, it returns false. If we set its "false" condition as the first instance of iterator(item) being true, then it will return false as soon as it finds it, which satisfies the true condition for some().
+    return !_.every(collection, function(item) {
+      return !iterator(item);
+    });
   };
 
 
